@@ -26,154 +26,164 @@ import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 /**
  * MessageDefinition
  */
-public class MessageDefinition
-{
-	// --- public static ---
+public class MessageDefinition {
+    // --- public static ---
 
-	public static Builder newBuilder(String msgTypeName) {
-		return new Builder(msgTypeName);
-	}
+    public static Builder newBuilder(String msgTypeName) {
+        return new Builder(msgTypeName);
+    }
 
-	// --- public ---
+    // --- public ---
 
-	public String toString() {
-		return mMsgType.toString();
-	}
+    public String toString() {
+        return mMsgType.toString();
+    }
 
-	// --- package ---
+    // --- package ---
 
-	DescriptorProto getMessageType() {
-		return mMsgType;
-	}
+    DescriptorProto getMessageType() {
+        return mMsgType;
+    }
 
-	// --- private ---
+    // --- private ---
 
-	private MessageDefinition(DescriptorProto msgType) {
-		mMsgType = msgType;
-	}
+    private MessageDefinition(DescriptorProto msgType) {
+        mMsgType = msgType;
+    }
 
-	private DescriptorProto mMsgType;
+    private DescriptorProto mMsgType;
 
-	/**
-	 * MessageDefinition.Builder
-	 */
-	public static class Builder
-	{
-		// --- public ---
+    /**
+     * MessageDefinition.Builder
+     */
+    public static class Builder {
+        // --- public ---
 
-		public Builder addField(String label, String type, String name, int num) {
-			return addField(label, type, name, num, null);
-		}
-		public Builder addField(String label, String type, String name, int num, String defaultVal) {
-			FieldDescriptorProto.Label protoLabel = sLabelMap.get(label);
-			if (protoLabel == null) throw new IllegalArgumentException("Illegal label: " + label);
-			addField(protoLabel, type, name, num, defaultVal, null);
-			return this;
-		}
+        public Builder addField(String label, String type, String name, int num) {
+            return addField(label, type, name, num, null);
+        }
 
-		public OneofBuilder addOneof(String oneofName) {
-			mMsgTypeBuilder.addOneofDecl(OneofDescriptorProto.newBuilder().setName(oneofName).build());
-			return new OneofBuilder(this, mOneofIndex++);
-		}
+        public Builder addField(String label, String type, String name, int num, String defaultVal) {
+            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label);
+            if (protoLabel == null) {
+                throw new IllegalArgumentException("Illegal label: " + label);
+            }
+            addField(protoLabel, type, name, num, defaultVal, null);
+            return this;
+        }
 
-		public Builder addMessageDefinition(MessageDefinition msgDef) {
-			mMsgTypeBuilder.addNestedType(msgDef.getMessageType());
-			return this;
-		}
+        public OneofBuilder addOneof(String oneofName) {
+            mMsgTypeBuilder.addOneofDecl(OneofDescriptorProto.newBuilder().setName(oneofName).build());
+            return new OneofBuilder(this, mOneofIndex++);
+        }
 
-		public Builder addEnumDefinition(EnumDefinition enumDef) {
-			mMsgTypeBuilder.addEnumType(enumDef.getEnumType());
-			return this;
-		}
+        public Builder addMessageDefinition(MessageDefinition msgDef) {
+            mMsgTypeBuilder.addNestedType(msgDef.getMessageType());
+            return this;
+        }
 
-		public MessageDefinition build() {
-			return new MessageDefinition(mMsgTypeBuilder.build());
-		}
+        public Builder addEnumDefinition(EnumDefinition enumDef) {
+            mMsgTypeBuilder.addEnumType(enumDef.getEnumType());
+            return this;
+        }
 
-		// --- private ---
+        public MessageDefinition build() {
+            return new MessageDefinition(mMsgTypeBuilder.build());
+        }
 
-		private Builder(String msgTypeName) {
-			mMsgTypeBuilder = DescriptorProto.newBuilder();
-			mMsgTypeBuilder.setName(msgTypeName);
-		}
+        // --- private ---
 
-		private void addField(FieldDescriptorProto.Label label, String type, String name, int num, String defaultVal, OneofBuilder oneofBuilder) {
-			FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
-			fieldBuilder.setLabel(label);
-			FieldDescriptorProto.Type primType = sTypeMap.get(type);
-			if (primType != null) fieldBuilder.setType(primType); else fieldBuilder.setTypeName(type);
-			fieldBuilder.setName(name).setNumber(num);
-			if (defaultVal != null) fieldBuilder.setDefaultValue(defaultVal);
-			if (oneofBuilder != null) fieldBuilder.setOneofIndex(oneofBuilder.getIdx());
-			mMsgTypeBuilder.addField(fieldBuilder.build());
-		}
+        private Builder(String msgTypeName) {
+            mMsgTypeBuilder = DescriptorProto.newBuilder();
+            mMsgTypeBuilder.setName(msgTypeName);
+        }
 
-		private DescriptorProto.Builder mMsgTypeBuilder;
-		private int mOneofIndex = 0;
-	}
+        private void addField(FieldDescriptorProto.Label label, String type, String name, int num, String defaultVal, OneofBuilder oneofBuilder) {
+            FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
+            fieldBuilder.setLabel(label);
+            FieldDescriptorProto.Type primType = sTypeMap.get(type);
+            if (primType != null) {
+                fieldBuilder.setType(primType);
+            } else {
+                fieldBuilder.setTypeName(type);
+            }
+            fieldBuilder.setName(name).setNumber(num);
+            if (defaultVal != null) {
+                fieldBuilder.setDefaultValue(defaultVal);
+            }
+            if (oneofBuilder != null) {
+                fieldBuilder.setOneofIndex(oneofBuilder.getIdx());
+            }
+            mMsgTypeBuilder.addField(fieldBuilder.build());
+        }
 
-	/**
-	 * MessageDefinition.OneofBuilder
-	 */
-	public static class OneofBuilder
-	{
-		// --- public ---
+        private DescriptorProto.Builder mMsgTypeBuilder;
+        private int mOneofIndex = 0;
+    }
 
-		public OneofBuilder addField(String type, String name, int num) {
-			return addField(type, name, num, null);
-		}
-		public OneofBuilder addField(String type, String name, int num, String defaultVal) {
-			mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, defaultVal, this);
-			return this;
-		}
+    /**
+     * MessageDefinition.OneofBuilder
+     */
+    public static class OneofBuilder {
+        // --- public ---
 
-		public MessageDefinition.Builder msgDefBuilder() {
-			return mMsgBuilder;
-		}
-		public int getIdx() {
-			return mIdx;
-		}
+        public OneofBuilder addField(String type, String name, int num) {
+            return addField(type, name, num, null);
+        }
 
-		// --- private ---
+        public OneofBuilder addField(String type, String name, int num, String defaultVal) {
+            mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, defaultVal, this);
+            return this;
+        }
 
-		private OneofBuilder(MessageDefinition.Builder msgBuilder, int oneofIdx) {
-			mMsgBuilder = msgBuilder;
-			mIdx = oneofIdx;
-		}
+        public MessageDefinition.Builder msgDefBuilder() {
+            return mMsgBuilder;
+        }
 
-		private MessageDefinition.Builder mMsgBuilder;
-		private int mIdx;
-	}
+        public int getIdx() {
+            return mIdx;
+        }
 
-	// --- private static ---
+        // --- private ---
 
-	private static Map<String,FieldDescriptorProto.Type> sTypeMap;
-	private static Map<String,FieldDescriptorProto.Label> sLabelMap;
+        private OneofBuilder(MessageDefinition.Builder msgBuilder, int oneofIdx) {
+            mMsgBuilder = msgBuilder;
+            mIdx = oneofIdx;
+        }
 
-	static {
-		sTypeMap = new HashMap<String,FieldDescriptorProto.Type>();
-		sTypeMap.put("double", FieldDescriptorProto.Type.TYPE_DOUBLE);
-		sTypeMap.put("float", FieldDescriptorProto.Type.TYPE_FLOAT);
-		sTypeMap.put("int32", FieldDescriptorProto.Type.TYPE_INT32);
-		sTypeMap.put("int64", FieldDescriptorProto.Type.TYPE_INT64);
-		sTypeMap.put("uint32", FieldDescriptorProto.Type.TYPE_UINT32);
-		sTypeMap.put("uint64", FieldDescriptorProto.Type.TYPE_UINT64);
-		sTypeMap.put("sint32", FieldDescriptorProto.Type.TYPE_SINT32);
-		sTypeMap.put("sint64", FieldDescriptorProto.Type.TYPE_SINT64);
-		sTypeMap.put("fixed32", FieldDescriptorProto.Type.TYPE_FIXED32);
-		sTypeMap.put("fixed64", FieldDescriptorProto.Type.TYPE_FIXED64);
-		sTypeMap.put("sfixed32", FieldDescriptorProto.Type.TYPE_SFIXED32);
-		sTypeMap.put("sfixed64", FieldDescriptorProto.Type.TYPE_SFIXED64);
-		sTypeMap.put("bool", FieldDescriptorProto.Type.TYPE_BOOL);
-		sTypeMap.put("string", FieldDescriptorProto.Type.TYPE_STRING);
-		sTypeMap.put("bytes", FieldDescriptorProto.Type.TYPE_BYTES);
-		//sTypeMap.put("enum", FieldDescriptorProto.Type.TYPE_ENUM);
-		//sTypeMap.put("message", FieldDescriptorProto.Type.TYPE_MESSAGE);
-		//sTypeMap.put("group", FieldDescriptorProto.Type.TYPE_GROUP);
-		
-		sLabelMap = new HashMap<String,FieldDescriptorProto.Label>();
-		sLabelMap.put("optional", FieldDescriptorProto.Label.LABEL_OPTIONAL);
-		sLabelMap.put("required", FieldDescriptorProto.Label.LABEL_REQUIRED);
-		sLabelMap.put("repeated", FieldDescriptorProto.Label.LABEL_REPEATED);
-	}
+        private MessageDefinition.Builder mMsgBuilder;
+        private int mIdx;
+    }
+
+    // --- private static ---
+
+    private static Map<String, FieldDescriptorProto.Type> sTypeMap;
+    private static Map<String, FieldDescriptorProto.Label> sLabelMap;
+
+    static {
+        sTypeMap = new HashMap<String, FieldDescriptorProto.Type>();
+        sTypeMap.put("double", FieldDescriptorProto.Type.TYPE_DOUBLE);
+        sTypeMap.put("float", FieldDescriptorProto.Type.TYPE_FLOAT);
+        sTypeMap.put("int32", FieldDescriptorProto.Type.TYPE_INT32);
+        sTypeMap.put("int64", FieldDescriptorProto.Type.TYPE_INT64);
+        sTypeMap.put("uint32", FieldDescriptorProto.Type.TYPE_UINT32);
+        sTypeMap.put("uint64", FieldDescriptorProto.Type.TYPE_UINT64);
+        sTypeMap.put("sint32", FieldDescriptorProto.Type.TYPE_SINT32);
+        sTypeMap.put("sint64", FieldDescriptorProto.Type.TYPE_SINT64);
+        sTypeMap.put("fixed32", FieldDescriptorProto.Type.TYPE_FIXED32);
+        sTypeMap.put("fixed64", FieldDescriptorProto.Type.TYPE_FIXED64);
+        sTypeMap.put("sfixed32", FieldDescriptorProto.Type.TYPE_SFIXED32);
+        sTypeMap.put("sfixed64", FieldDescriptorProto.Type.TYPE_SFIXED64);
+        sTypeMap.put("bool", FieldDescriptorProto.Type.TYPE_BOOL);
+        sTypeMap.put("string", FieldDescriptorProto.Type.TYPE_STRING);
+        sTypeMap.put("bytes", FieldDescriptorProto.Type.TYPE_BYTES);
+        //sTypeMap.put("enum", FieldDescriptorProto.Type.TYPE_ENUM);
+        //sTypeMap.put("message", FieldDescriptorProto.Type.TYPE_MESSAGE);
+        //sTypeMap.put("group", FieldDescriptorProto.Type.TYPE_GROUP);
+
+        sLabelMap = new HashMap<String, FieldDescriptorProto.Label>();
+        sLabelMap.put("optional", FieldDescriptorProto.Label.LABEL_OPTIONAL);
+        sLabelMap.put("required", FieldDescriptorProto.Label.LABEL_REQUIRED);
+        sLabelMap.put("repeated", FieldDescriptorProto.Label.LABEL_REPEATED);
+    }
 }

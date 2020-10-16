@@ -18,6 +18,7 @@ package com.github.os72.protobuf.dynamic;
 
 import java.io.FileInputStream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -25,6 +26,7 @@ import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.DynamicMessage;
 
+@Slf4j
 public class DynamicSchemaTest
 {
 	/**
@@ -32,7 +34,7 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testBasic() throws Exception {
-		log("--- testBasic ---");
+		log.info("--- testBasic ---");
 
 		// Create dynamic schema
 		DynamicSchema.Builder schemaBuilder = DynamicSchema.newBuilder();
@@ -46,7 +48,7 @@ public class DynamicSchemaTest
 
 		schemaBuilder.addMessageDefinition(msgDef);
 		DynamicSchema schema = schemaBuilder.build();
-		log(schema);
+		log.info("schema: {}", schema);
 
 		// Create dynamic message from schema
 		DynamicMessage.Builder msgBuilder = schema.newMessageBuilder("Person");
@@ -56,7 +58,7 @@ public class DynamicSchemaTest
 				.setField(msgDesc.findFieldByName("name"), "Alan Turing")
 				.setField(msgDesc.findFieldByName("email"), "at@sis.gov.uk")
 				.build();
-		log(msg);
+		log.info("msg: {}", msg);
 
 		// Create data object traditional way using generated code
 		PersonSchema.Person person = PersonSchema.Person.newBuilder()
@@ -74,7 +76,7 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testOneof() throws Exception {
-		log("--- testOneof ---");
+		log.info("--- testOneof ---");
 		
 		// Create dynamic schema
 		DynamicSchema.Builder schemaBuilder = DynamicSchema.newBuilder();
@@ -103,8 +105,8 @@ public class DynamicSchemaTest
 		
 		schemaBuilder.addMessageDefinition(msgDef);
 		DynamicSchema schema = schemaBuilder.build();
-		log(schema);
-		
+		log.info("schema: {}", schema);
+
 		// Create dynamic message from schema
 		DynamicMessage.Builder msgBuilder = schema.newMessageBuilder("Person");
 		Descriptor msgDesc = msgBuilder.getDescriptorForType();
@@ -113,7 +115,7 @@ public class DynamicSchemaTest
 				.setField(msgDesc.findFieldByName("name"), "Alan Turing")
                 .setField(msgDesc.findFieldByName("work_addr"), "85 Albert Embankment")
 				.build();
-		log(msg);
+		log.info("msg: {}", msg);
 		
 		// Create data object traditional way using generated code 
 		PersonSchema.Person person = PersonSchema.Person.newBuilder()
@@ -131,7 +133,7 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testAdvanced() throws Exception {
-		log("--- testAdvanced ---");
+		log.info("--- testAdvanced ---");
 		
 		// Create dynamic schema
 		DynamicSchema.Builder schemaBuilder = DynamicSchema.newBuilder();
@@ -159,7 +161,7 @@ public class DynamicSchemaTest
 		
 		schemaBuilder.addMessageDefinition(msgDefPerson);
 		DynamicSchema schema = schemaBuilder.build();
-		log(schema);
+		log.info("schema: {}", schema);
 		
 		// Create dynamic message from schema
 		Descriptor phoneDesc = schema.getMessageDescriptor("Person.PhoneNumber");
@@ -179,7 +181,7 @@ public class DynamicSchemaTest
 				.addRepeatedField(personDesc.findFieldByName("phone"), phoneMsg1)
 				.addRepeatedField(personDesc.findFieldByName("phone"), phoneMsg2)
 				.build();
-		log(personMsg);
+		log.info("personMsg: {}", personMsg);
 		
 		phoneMsg1 = (DynamicMessage)personMsg.getRepeatedField(personDesc.findFieldByName("phone"), 0);
 		phoneMsg2 = (DynamicMessage)personMsg.getRepeatedField(personDesc.findFieldByName("phone"), 1);
@@ -189,10 +191,10 @@ public class DynamicSchemaTest
 		
 		EnumValueDescriptor phoneType1 = (EnumValueDescriptor)phoneMsg1.getField(phoneDesc.findFieldByName("type"));
 		EnumValueDescriptor phoneType2 = (EnumValueDescriptor)phoneMsg2.getField(phoneDesc.findFieldByName("type"));
-		
-		log(phoneNumber1 + ", " + phoneType1.getName());
-		log(phoneNumber2 + ", " + phoneType2.getName());
-		
+
+		log.info("{}, {}", phoneNumber1, phoneType1.getName());
+		log.info("{}, {}", phoneNumber2, phoneType2.getName());
+
 		Assert.assertEquals("+44-111", phoneNumber1);
 		Assert.assertEquals("HOME", phoneType1.getName()); // [default = HOME]
 		
@@ -205,8 +207,8 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testSchemaMerge() throws Exception {
-		log("--- testSchemaMerge ---");
-		
+		log.info("--- testSchemaMerge ---");
+
 		DynamicSchema.Builder schemaBuilder1 = DynamicSchema.newBuilder().setName("Schema1.proto").setPackage("package1");
 		schemaBuilder1.addMessageDefinition(MessageDefinition.newBuilder("Msg1").build());
 		
@@ -214,8 +216,8 @@ public class DynamicSchemaTest
 		schemaBuilder2.addMessageDefinition(MessageDefinition.newBuilder("Msg2").build());
 		
 		schemaBuilder1.addSchema(schemaBuilder2.build());
-		DynamicSchema schema1 = schemaBuilder1.build(); 
-		log(schema1);
+		DynamicSchema schema1 = schemaBuilder1.build();
+		log.info("schema1: {}", schema1);
 		
 		// schema1 should contain both Msg1 and Msg2
 		Assert.assertNotNull(schema1.getMessageDescriptor("Msg1"));
@@ -225,7 +227,7 @@ public class DynamicSchemaTest
 		schemaBuilder3.addMessageDefinition(MessageDefinition.newBuilder("Msg1").build()); // Msg1 to force collision
 		schemaBuilder1.addSchema(schemaBuilder3.build());
 		schema1 = schemaBuilder1.build(); 
-		log(schema1);
+		log.info("schema1: {}", schema1);
 		
 		// Msg1 now ambiguous, must fully qualify name (package1, package3); Msg2 still unique
 		Assert.assertNull(schema1.getMessageDescriptor("Msg1"));
@@ -241,7 +243,7 @@ public class DynamicSchemaTest
 			schema1 = schemaBuilder1.build(); 			
 		}
 		catch (IllegalArgumentException e) {
-			log("expected: " + e);
+			log.error("expected: ", e);
 			ex = e;
 		}
 		Assert.assertNotNull(ex);
@@ -252,11 +254,11 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testSchemaSerialization() throws Exception {
-		log("--- testSchemaSerialization ---");
-		
+		log.info("--- testSchemaSerialization ---");
+
 		// Read protoc compiler output (deserialize)
 		DynamicSchema schema1 = DynamicSchema.parseFrom(new FileInputStream("src/test/resources/PersonSchema.desc"));
-		log(schema1);
+		log.info("PersonSchema.desc: {}", schema1);
 		
 		byte[] descBuf = schema1.toByteArray(); // serialize
 		DynamicSchema schema2 = DynamicSchema.parseFrom(descBuf); // deserialize
@@ -270,11 +272,11 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testSchemaDependency() throws Exception {
-		log("--- testSchemaDependency ---");
-		
+		log.info("--- testSchemaDependency ---");
+
 		// Read protoc compiler output (deserialize)
 		DynamicSchema schema1 = DynamicSchema.parseFrom(new FileInputStream("src/test/resources/Schema1.desc"));
-		log(schema1);
+		log.info("Schema1.desc: {}", schema1);
 		
 		// schema1 should contain all imported types
 		Assert.assertNotNull(schema1.getMessageDescriptor("Msg1"));
@@ -290,23 +292,19 @@ public class DynamicSchemaTest
 	 */
 	@Test
 	public void testSchemaDependencyNoImports() throws Exception {
-		log("--- testSchemaDependencyNoImports ---");
-		
+		log.info("--- testSchemaDependencyNoImports ---");
+
 		// Trying to parse schema descriptor with missing dependencies should throw exception
 		IllegalArgumentException ex = null;
 		try {
 			// Read protoc compiler output (deserialize)
 			DynamicSchema schema1 = DynamicSchema.parseFrom(new FileInputStream("src/test/resources/Schema1_no_imports.desc"));
-			log(schema1);
+			log.info("Schema1_no_imports.desc: {}", schema1);
 		}
 		catch (IllegalArgumentException e) {
-			log("expected: " + e);
+			log.error("expected: ", e);
 			ex = e;
 		}
 		Assert.assertNotNull(ex);
-	}
-
-	static void log(Object o) {
-		System.out.println(o);
 	}
 }
