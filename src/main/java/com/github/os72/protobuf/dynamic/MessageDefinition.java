@@ -16,12 +16,12 @@
 
 package com.github.os72.protobuf.dynamic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * MessageDefinition
@@ -64,11 +64,9 @@ public class MessageDefinition {
         }
 
         public Builder addField(String label, String type, String name, int num, String defaultVal) {
-            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label);
-            if (protoLabel == null) {
-                throw new IllegalArgumentException("Illegal label: " + label);
-            }
-            addField(protoLabel, type, name, num, defaultVal, null);
+            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label) == null || sLabelMap.get(label).equals(FieldDescriptorProto.Label.LABEL_REQUIRED) ?
+                    FieldDescriptorProto.Label.LABEL_OPTIONAL : sLabelMap.get(label);
+            addField(protoLabel, type, name, num, null);
             return this;
         }
 
@@ -98,7 +96,7 @@ public class MessageDefinition {
             mMsgTypeBuilder.setName(msgTypeName);
         }
 
-        private void addField(FieldDescriptorProto.Label label, String type, String name, int num, String defaultVal, OneofBuilder oneofBuilder) {
+        private void addField(FieldDescriptorProto.Label label, String type, String name, int num, OneofBuilder oneofBuilder) {
             FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
             fieldBuilder.setLabel(label);
             FieldDescriptorProto.Type primType = sTypeMap.get(type);
@@ -108,9 +106,6 @@ public class MessageDefinition {
                 fieldBuilder.setTypeName(type);
             }
             fieldBuilder.setName(name).setNumber(num);
-            if (defaultVal != null) {
-                fieldBuilder.setDefaultValue(defaultVal);
-            }
             if (oneofBuilder != null) {
                 fieldBuilder.setOneofIndex(oneofBuilder.getIdx());
             }
@@ -128,11 +123,11 @@ public class MessageDefinition {
         // --- public ---
 
         public OneofBuilder addField(String type, String name, int num) {
-            return addField(type, name, num, null);
+            return add(type, name, num);
         }
 
-        public OneofBuilder addField(String type, String name, int num, String defaultVal) {
-            mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, defaultVal, this);
+        public OneofBuilder add(String type, String name, int num) {
+            mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, this);
             return this;
         }
 
@@ -182,8 +177,6 @@ public class MessageDefinition {
         //sTypeMap.put("group", FieldDescriptorProto.Type.TYPE_GROUP);
 
         sLabelMap = new HashMap<String, FieldDescriptorProto.Label>();
-        sLabelMap.put("optional", FieldDescriptorProto.Label.LABEL_OPTIONAL);
-        sLabelMap.put("required", FieldDescriptorProto.Label.LABEL_REQUIRED);
         sLabelMap.put("repeated", FieldDescriptorProto.Label.LABEL_REPEATED);
     }
 }

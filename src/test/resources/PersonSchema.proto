@@ -1,10 +1,12 @@
+syntax="proto3";
+
 option java_package = "com.github.os72.protobuf.dynamic";
 option java_outer_classname = "PersonSchema";
 
 message Person {
-  required int32 id = 1;
-  required string name = 2;
-  optional string email = 3;
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
   oneof address {
     string home_addr = 4;
     string work_addr = 5;
@@ -17,8 +19,8 @@ message Person {
   }
 
   message PhoneNumber {
-    required string number = 1;
-    optional PhoneType type = 2 [default = HOME];
+    string number = 1;
+    PhoneType type = 2;
   }
 
   repeated PhoneNumber phone = 6;

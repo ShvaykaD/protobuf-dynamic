@@ -41,9 +41,9 @@ public class DynamicSchemaTest
 		schemaBuilder.setName("PersonSchemaDynamic.proto");
 
 		MessageDefinition msgDef = MessageDefinition.newBuilder("Person") // message Person
-				.addField("required", "int32", "id", 1)		// required int32 id = 1
-				.addField("required", "string", "name", 2)	// required string name = 2
-				.addField("optional", "string", "email", 3)	// optional string email = 3
+				.addField(null, "int32", "id", 1)		// int32 id = 1
+				.addField(null, "string", "name", 2)		// string name = 2
+				.addField(null, "string", "email", 3)	// string email = 3
 				.build();
 
 		schemaBuilder.addMessageDefinition(msgDef);
@@ -83,10 +83,10 @@ public class DynamicSchemaTest
 		schemaBuilder.setName("PersonSchemaDynamic.proto");
 		
 		MessageDefinition msgDef = MessageDefinition.newBuilder("Person") // message Person
-				.addField("required", "int32", "id", 1)		// required int32 id = 1
-				.addField("required", "string", "name", 2)	// required string name = 2
-				.addField("optional", "string", "email", 3)	// optional string email = 3
-				.addOneof("address")						// oneof address
+				.addField(null, "int32", "id", 1)		// int32 id = 1
+				.addField(null, "string", "name", 2)		// string name = 2
+				.addField(null, "string", "email", 3)	// string email = 3
+				.addOneof("address")									// oneof address
 					.addField("string", "home_addr", 4)		// string home_addr = 4
 					.addField("string", "work_addr", 5)		// string work_addr = 5
 					.msgDefBuilder()
@@ -94,13 +94,13 @@ public class DynamicSchemaTest
 		
 		// Demo OneofBuilder
 		MessageDefinition.Builder msgDefBuilder = MessageDefinition.newBuilder("SomeOneofDef");
-		msgDefBuilder.addField("required", "int32", "id", 1);
+		msgDefBuilder.addField(null, "int32", "id", 1);
 		MessageDefinition.OneofBuilder oneofBuilder1 = msgDefBuilder.addOneof("addr1");
 		MessageDefinition.OneofBuilder oneofBuilder2 = msgDefBuilder.addOneof("addr2");
 		oneofBuilder1.addField("string", "addr11", 11);
 		oneofBuilder1.addField("string", "addr12", 12);
-		oneofBuilder2.addField("string", "addr21", 21, "default21");
-		oneofBuilder2.addField("string", "addr22", 22, "default22");
+		oneofBuilder2.addField("string", "addr21", 21);
+		oneofBuilder2.addField("string", "addr22", 22);
 		schemaBuilder.addMessageDefinition(msgDefBuilder.build());
 		
 		schemaBuilder.addMessageDefinition(msgDef);
@@ -146,16 +146,16 @@ public class DynamicSchemaTest
 				.build();
 		
 		MessageDefinition msgDefPhoneNumber = MessageDefinition.newBuilder("PhoneNumber") // message PhoneNumber
-				.addField("required", "string", "number", 1)			// required string number = 1
-				.addField("optional", "PhoneType", "type", 2, "HOME")	// optional PhoneType type = 2 [default = HOME]
+				.addField(null, "string", "number", 1)						// string number = 1
+				.addField(null, "PhoneType", "type", 2, "HOME")	// PhoneType type = 2
 				.build();
 		
 		MessageDefinition msgDefPerson = MessageDefinition.newBuilder("Person") // message Person
-				.addEnumDefinition(enumDefPhoneType)				// enum PhoneType (nested)
-				.addMessageDefinition(msgDefPhoneNumber)			// message PhoneNumber (nested)
-				.addField("required", "int32", "id", 1)				// required int32 id = 1
-				.addField("required", "string", "name", 2)			// required string name = 2
-				.addField("optional", "string", "email", 3)			// optional string email = 3
+				.addEnumDefinition(enumDefPhoneType)									// enum PhoneType (nested)
+				.addMessageDefinition(msgDefPhoneNumber)								// message PhoneNumber (nested)
+				.addField(null, "int32", "id", 1)				// int32 id = 1
+				.addField(null, "string", "name", 2)				// string name = 2
+				.addField(null, "string", "email", 3)			// string email = 3
 				.addField("repeated", "PhoneNumber", "phone", 4)	// repeated PhoneNumber phone = 4
 				.build();
 		
@@ -196,7 +196,7 @@ public class DynamicSchemaTest
 		log.info("{}, {}", phoneNumber2, phoneType2.getName());
 
 		Assert.assertEquals("+44-111", phoneNumber1);
-		Assert.assertEquals("HOME", phoneType1.getName()); // [default = HOME]
+		Assert.assertEquals("MOBILE", phoneType1.getName()); // [default = MOBILE]
 		
 		Assert.assertEquals("+44-222", phoneNumber2);
 		Assert.assertEquals("WORK", phoneType2.getName());

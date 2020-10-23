@@ -5,7 +5,7 @@
   <groupId>com.github.os72</groupId>
   <artifactId>protobuf-dynamic</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>protobuf-dynamic</name>
   <url>https://github.com/os72/protobuf-dynamic</url>
   <description>Protocol Buffers Dynamic Schema</description>
@@ -38,9 +38,11 @@
   </scm>
 
   <properties>
-	<protobuf.version>2.6.1</protobuf.version>
+	<protobuf.version>3.11.4</protobuf.version>
 	<slf4j.version>1.7.7</slf4j.version>
 	<lombok.version>1.16.18</lombok.version>
+	<junit.version>4.12</junit.version>
+	<logback.version>1.2.3</logback.version>
   </properties>
 
   <dependencies>
@@ -55,19 +57,26 @@
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
-		<version>4.12</version>
+		<version>${junit.version}</version>
 		<scope>test</scope>
+	</dependency>
+	<dependency>
+	  <groupId>ch.qos.logback</groupId>
+	  <artifactId>logback-core</artifactId>
+	  <version>${logback.version}</version>
+	  <scope>test</scope>
+	</dependency>
+	<dependency>
+	  <groupId>ch.qos.logback</groupId>
+	  <artifactId>logback-classic</artifactId>
+	  <version>${logback.version}</version>
+	  <scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-api</artifactId>
 		<version>${slf4j.version}</version>
 		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-simple</artifactId>
-		<version>${slf4j.version}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.projectlombok</groupId>
@@ -115,8 +124,8 @@
 		  <artifactId>maven-compiler-plugin</artifactId>
 		  <version>3.0</version>
 		  <configuration>
-			<source>1.5</source>
-			<target>1.5</target>
+			<source>6</source>
+			<target>6</target>
 		  </configuration>
 		</plugin>
 		<plugin>
