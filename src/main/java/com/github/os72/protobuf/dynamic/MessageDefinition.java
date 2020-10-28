@@ -60,12 +60,7 @@ public class MessageDefinition {
         // --- public ---
 
         public Builder addField(String label, String type, String name, int num) {
-            return addField(label, type, name, num, null);
-        }
-
-        public Builder addField(String label, String type, String name, int num, String defaultVal) {
-            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label) == null || sLabelMap.get(label).equals(FieldDescriptorProto.Label.LABEL_REQUIRED) ?
-                    FieldDescriptorProto.Label.LABEL_OPTIONAL : sLabelMap.get(label);
+            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label) == null ? FieldDescriptorProto.Label.LABEL_OPTIONAL : sLabelMap.get(label);
             addField(protoLabel, type, name, num, null);
             return this;
         }

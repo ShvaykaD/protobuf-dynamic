@@ -147,7 +147,7 @@ public class DynamicSchemaTest
 		
 		MessageDefinition msgDefPhoneNumber = MessageDefinition.newBuilder("PhoneNumber") // message PhoneNumber
 				.addField(null, "string", "number", 1)						// string number = 1
-				.addField(null, "PhoneType", "type", 2, "HOME")	// PhoneType type = 2
+				.addField(null, "PhoneType", "type", 2)	// PhoneType type = 2
 				.build();
 		
 		MessageDefinition msgDefPerson = MessageDefinition.newBuilder("Person") // message Person
