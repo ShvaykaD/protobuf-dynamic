@@ -3,3 +3,4 @@
 .idea/**
 .idea
 target/
+src/test/java/com/github/os72/protobuf/dynamic/Schema*.java
