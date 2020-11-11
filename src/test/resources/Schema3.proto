@@ -1,3 +1,5 @@
+syntax="proto3";
+
 option java_package = "com.github.os72.protobuf.dynamic";
 option java_outer_classname = "Schema3";
 
