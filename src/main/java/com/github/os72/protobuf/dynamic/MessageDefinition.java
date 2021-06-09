@@ -60,7 +60,7 @@ public class MessageDefinition {
         // --- public ---
 
         public Builder addField(String label, String type, String name, int num) {
-            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label) == null ? FieldDescriptorProto.Label.LABEL_OPTIONAL : sLabelMap.get(label);
+            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label);
             addField(protoLabel, type, name, num, null);
             return this;
         }
@@ -93,7 +93,9 @@ public class MessageDefinition {
 
         private void addField(FieldDescriptorProto.Label label, String type, String name, int num, OneofBuilder oneofBuilder) {
             FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
-            fieldBuilder.setLabel(label);
+            if (label != null) {
+                fieldBuilder.setLabel(label);
+            }
             FieldDescriptorProto.Type primType = sTypeMap.get(type);
             if (primType != null) {
                 fieldBuilder.setType(primType);
@@ -173,5 +175,6 @@ public class MessageDefinition {
 
         sLabelMap = new HashMap<String, FieldDescriptorProto.Label>();
         sLabelMap.put("repeated", FieldDescriptorProto.Label.LABEL_REPEATED);
+        sLabelMap.put("optional", FieldDescriptorProto.Label.LABEL_OPTIONAL);
     }
 }

@@ -16,15 +16,14 @@
 
 package com.github.os72.protobuf.dynamic;
 
-import java.io.FileInputStream;
-
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.Assert;
-
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.DynamicMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.FileInputStream;
 
 @Slf4j
 public class DynamicSchemaTest
@@ -41,7 +40,7 @@ public class DynamicSchemaTest
 		schemaBuilder.setName("PersonSchemaDynamic.proto");
 
 		MessageDefinition msgDef = MessageDefinition.newBuilder("Person") // message Person
-				.addField(null, "int32", "id", 1)		// int32 id = 1
+				.addField("optional", "int32", "id", 1)		// int32 id = 1
 				.addField(null, "string", "name", 2)		// string name = 2
 				.addField(null, "string", "email", 3)	// string email = 3
 				.build();
@@ -53,22 +52,37 @@ public class DynamicSchemaTest
 		// Create dynamic message from schema
 		DynamicMessage.Builder msgBuilder = schema.newMessageBuilder("Person");
 		Descriptor msgDesc = msgBuilder.getDescriptorForType();
-		DynamicMessage msg = msgBuilder
+		DynamicMessage msgWithoutIdValue = msgBuilder
+				.setField(msgDesc.findFieldByName("name"), "Alan Turing")
+				.setField(msgDesc.findFieldByName("email"), "at@sis.gov.uk")
+				.build();
+		log.info("msg: {}", msgWithoutIdValue);
+
+		DynamicMessage msgWithIdValue = msgBuilder
 				.setField(msgDesc.findFieldByName("id"), 1)
 				.setField(msgDesc.findFieldByName("name"), "Alan Turing")
 				.setField(msgDesc.findFieldByName("email"), "at@sis.gov.uk")
 				.build();
-		log.info("msg: {}", msg);
+		log.info("msg: {}", msgWithIdValue);
 
 		// Create data object traditional way using generated code
 		PersonSchema.Person person = PersonSchema.Person.newBuilder()
+				.setName("Alan Turing")
+				.setEmail("at@sis.gov.uk")
+				.build();
+
+		// Create data object traditional way using generated code
+		PersonSchema.Person person2 = PersonSchema.Person.newBuilder()
 				.setId(1)
 				.setName("Alan Turing")
 				.setEmail("at@sis.gov.uk")
 				.build();
 
 		// Should be equivalent
-		Assert.assertEquals(person.toString(), msg.toString());
+		Assert.assertEquals(person.toString(), msgWithoutIdValue.toString());
+
+		// Should be equivalent
+		Assert.assertEquals(person2.toString(), msgWithIdValue.toString());
 	}
 
 	/**

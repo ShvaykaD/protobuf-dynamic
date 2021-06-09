@@ -19,7 +19,12 @@ public final class PersonSchema {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 id = 1;</code>
+     * <code>optional int32 id = 1;</code>
+     * @return Whether the id field is set.
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
      * @return The id.
      */
     int getId();
@@ -50,6 +55,11 @@ public final class PersonSchema {
 
     /**
      * <code>string home_addr = 4;</code>
+     * @return Whether the homeAddr field is set.
+     */
+    boolean hasHomeAddr();
+    /**
+     * <code>string home_addr = 4;</code>
      * @return The homeAddr.
      */
     java.lang.String getHomeAddr();
@@ -60,6 +70,11 @@ public final class PersonSchema {
     com.google.protobuf.ByteString
         getHomeAddrBytes();
 
+    /**
+     * <code>string work_addr = 5;</code>
+     * @return Whether the workAddr field is set.
+     */
+    boolean hasWorkAddr();
     /**
      * <code>string work_addr = 5;</code>
      * @return The workAddr.
@@ -101,7 +116,7 @@ public final class PersonSchema {
   /**
    * Protobuf type {@code Person}
    */
-  public  static final class Person extends
+  public static final class Person extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:Person)
       PersonOrBuilder {
@@ -148,7 +163,7 @@ public final class PersonSchema {
               done = true;
               break;
             case 8: {
-
+              bitField0_ |= 0x00000001;
               id_ = input.readInt32();
               break;
             }
@@ -177,9 +192,9 @@ public final class PersonSchema {
               break;
             }
             case 50: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
                 phone_ = new java.util.ArrayList<com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               phone_.add(
                   input.readMessage(com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber.parser(), extensionRegistry));
@@ -200,7 +215,7 @@ public final class PersonSchema {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        if (((mutable_bitField0_ & 0x00000002) != 0)) {
           phone_ = java.util.Collections.unmodifiableList(phone_);
         }
         this.unknownFields = unknownFields.build();
@@ -299,6 +314,10 @@ public final class PersonSchema {
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
           getValueDescriptor() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalStateException(
+              "Can't get the descriptor of an unrecognized enum value.");
+        }
         return getDescriptor().getValues().get(ordinal());
       }
       public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -363,7 +382,7 @@ public final class PersonSchema {
     /**
      * Protobuf type {@code Person.PhoneNumber}
      */
-    public  static final class PhoneNumber extends
+    public static final class PhoneNumber extends
         com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:Person.PhoneNumber)
         PhoneNumberOrBuilder {
@@ -457,6 +476,7 @@ public final class PersonSchema {
        * <code>string number = 1;</code>
        * @return The number.
        */
+      @java.lang.Override
       public java.lang.String getNumber() {
         java.lang.Object ref = number_;
         if (ref instanceof java.lang.String) {
@@ -473,6 +493,7 @@ public final class PersonSchema {
        * <code>string number = 1;</code>
        * @return The bytes for number.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getNumberBytes() {
         java.lang.Object ref = number_;
@@ -493,14 +514,14 @@ public final class PersonSchema {
        * <code>.Person.PhoneType type = 2;</code>
        * @return The enum numeric value on the wire for type.
        */
-      public int getTypeValue() {
+      @java.lang.Override public int getTypeValue() {
         return type_;
       }
       /**
        * <code>.Person.PhoneType type = 2;</code>
        * @return The type.
        */
-      public com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType getType() {
+      @java.lang.Override public com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType getType() {
         @SuppressWarnings("deprecation")
         com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType result = com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType.valueOf(type_);
         return result == null ? com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType.UNRECOGNIZED : result;
@@ -905,7 +926,7 @@ public final class PersonSchema {
          * <code>.Person.PhoneType type = 2;</code>
          * @return The enum numeric value on the wire for type.
          */
-        public int getTypeValue() {
+        @java.lang.Override public int getTypeValue() {
           return type_;
         }
         /**
@@ -914,6 +935,7 @@ public final class PersonSchema {
          * @return This builder for chaining.
          */
         public Builder setTypeValue(int value) {
+          
           type_ = value;
           onChanged();
           return this;
@@ -922,6 +944,7 @@ public final class PersonSchema {
          * <code>.Person.PhoneType type = 2;</code>
          * @return The type.
          */
+        @java.lang.Override
         public com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType getType() {
           @SuppressWarnings("deprecation")
           com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType result = com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType.valueOf(type_);
@@ -1004,6 +1027,7 @@ public final class PersonSchema {
 
     }
 
+    private int bitField0_;
     private int addressCase_ = 0;
     private java.lang.Object address_;
     public enum AddressCase
@@ -1048,9 +1072,18 @@ public final class PersonSchema {
     public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
-     * <code>int32 id = 1;</code>
+     * <code>optional int32 id = 1;</code>
+     * @return Whether the id field is set.
+     */
+    @java.lang.Override
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
      * @return The id.
      */
+    @java.lang.Override
     public int getId() {
       return id_;
     }
@@ -1061,6 +1094,7 @@ public final class PersonSchema {
      * <code>string name = 2;</code>
      * @return The name.
      */
+    @java.lang.Override
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
@@ -1077,6 +1111,7 @@ public final class PersonSchema {
      * <code>string name = 2;</code>
      * @return The bytes for name.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
       java.lang.Object ref = name_;
@@ -1097,6 +1132,7 @@ public final class PersonSchema {
      * <code>string email = 3;</code>
      * @return The email.
      */
+    @java.lang.Override
     public java.lang.String getEmail() {
       java.lang.Object ref = email_;
       if (ref instanceof java.lang.String) {
@@ -1113,6 +1149,7 @@ public final class PersonSchema {
      * <code>string email = 3;</code>
      * @return The bytes for email.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getEmailBytes() {
       java.lang.Object ref = email_;
@@ -1128,6 +1165,13 @@ public final class PersonSchema {
     }
 
     public static final int HOME_ADDR_FIELD_NUMBER = 4;
+    /**
+     * <code>string home_addr = 4;</code>
+     * @return Whether the homeAddr field is set.
+     */
+    public boolean hasHomeAddr() {
+      return addressCase_ == 4;
+    }
     /**
      * <code>string home_addr = 4;</code>
      * @return The homeAddr.
@@ -1173,6 +1217,13 @@ public final class PersonSchema {
     }
 
     public static final int WORK_ADDR_FIELD_NUMBER = 5;
+    /**
+     * <code>string work_addr = 5;</code>
+     * @return Whether the workAddr field is set.
+     */
+    public boolean hasWorkAddr() {
+      return addressCase_ == 5;
+    }
     /**
      * <code>string work_addr = 5;</code>
      * @return The workAddr.
@@ -1222,12 +1273,14 @@ public final class PersonSchema {
     /**
      * <code>repeated .Person.PhoneNumber phone = 6;</code>
      */
+    @java.lang.Override
     public java.util.List<com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber> getPhoneList() {
       return phone_;
     }
     /**
      * <code>repeated .Person.PhoneNumber phone = 6;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumberOrBuilder> 
         getPhoneOrBuilderList() {
       return phone_;
@@ -1235,18 +1288,21 @@ public final class PersonSchema {
     /**
      * <code>repeated .Person.PhoneNumber phone = 6;</code>
      */
+    @java.lang.Override
     public int getPhoneCount() {
       return phone_.size();
     }
     /**
      * <code>repeated .Person.PhoneNumber phone = 6;</code>
      */
+    @java.lang.Override
     public com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber getPhone(int index) {
       return phone_.get(index);
     }
     /**
      * <code>repeated .Person.PhoneNumber phone = 6;</code>
      */
+    @java.lang.Override
     public com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
         int index) {
       return phone_.get(index);
@@ -1266,7 +1322,7 @@ public final class PersonSchema {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (id_ != 0) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeInt32(1, id_);
       }
       if (!getNameBytes().isEmpty()) {
@@ -1293,7 +1349,7 @@ public final class PersonSchema {
       if (size != -1) return size;
 
       size = 0;
-      if (id_ != 0) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, id_);
       }
@@ -1328,8 +1384,11 @@ public final class PersonSchema {
       }
       com.github.os72.protobuf.dynamic.PersonSchema.Person other = (com.github.os72.protobuf.dynamic.PersonSchema.Person) obj;
 
-      if (getId()
-          != other.getId()) return false;
+      if (hasId() != other.hasId()) return false;
+      if (hasId()) {
+        if (getId()
+            != other.getId()) return false;
+      }
       if (!getName()
           .equals(other.getName())) return false;
       if (!getEmail()
@@ -1360,8 +1419,10 @@ public final class PersonSchema {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + ID_FIELD_NUMBER;
-      hash = (53 * hash) + getId();
+      if (hasId()) {
+        hash = (37 * hash) + ID_FIELD_NUMBER;
+        hash = (53 * hash) + getId();
+      }
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
       hash = (37 * hash) + EMAIL_FIELD_NUMBER;
@@ -1517,14 +1578,14 @@ public final class PersonSchema {
       public Builder clear() {
         super.clear();
         id_ = 0;
-
+        bitField0_ = (bitField0_ & ~0x00000001);
         name_ = "";
 
         email_ = "";
 
         if (phoneBuilder_ == null) {
           phone_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           phoneBuilder_.clear();
         }
@@ -1557,7 +1618,11 @@ public final class PersonSchema {
       public com.github.os72.protobuf.dynamic.PersonSchema.Person buildPartial() {
         com.github.os72.protobuf.dynamic.PersonSchema.Person result = new com.github.os72.protobuf.dynamic.PersonSchema.Person(this);
         int from_bitField0_ = bitField0_;
-        result.id_ = id_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.id_ = id_;
+          to_bitField0_ |= 0x00000001;
+        }
         result.name_ = name_;
         result.email_ = email_;
         if (addressCase_ == 4) {
@@ -1567,14 +1632,15 @@ public final class PersonSchema {
           result.address_ = address_;
         }
         if (phoneBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000002) != 0)) {
             phone_ = java.util.Collections.unmodifiableList(phone_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.phone_ = phone_;
         } else {
           result.phone_ = phoneBuilder_.build();
         }
+        result.bitField0_ = to_bitField0_;
         result.addressCase_ = addressCase_;
         onBuilt();
         return result;
@@ -1624,7 +1690,7 @@ public final class PersonSchema {
 
       public Builder mergeFrom(com.github.os72.protobuf.dynamic.PersonSchema.Person other) {
         if (other == com.github.os72.protobuf.dynamic.PersonSchema.Person.getDefaultInstance()) return this;
-        if (other.getId() != 0) {
+        if (other.hasId()) {
           setId(other.getId());
         }
         if (!other.getName().isEmpty()) {
@@ -1639,7 +1705,7 @@ public final class PersonSchema {
           if (!other.phone_.isEmpty()) {
             if (phone_.isEmpty()) {
               phone_ = other.phone_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensurePhoneIsMutable();
               phone_.addAll(other.phone_);
@@ -1652,7 +1718,7 @@ public final class PersonSchema {
               phoneBuilder_.dispose();
               phoneBuilder_ = null;
               phone_ = other.phone_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               phoneBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getPhoneFieldBuilder() : null;
@@ -1725,29 +1791,38 @@ public final class PersonSchema {
 
       private int id_ ;
       /**
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
+       * @return Whether the id field is set.
+       */
+      @java.lang.Override
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) != 0);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
        * @return The id.
        */
+      @java.lang.Override
       public int getId() {
         return id_;
       }
       /**
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
        * @param value The id to set.
        * @return This builder for chaining.
        */
       public Builder setId(int value) {
-        
+        bitField0_ |= 0x00000001;
         id_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 id = 1;</code>
+       * <code>optional int32 id = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearId() {
-        
+        bitField0_ = (bitField0_ & ~0x00000001);
         id_ = 0;
         onChanged();
         return this;
@@ -1907,8 +1982,17 @@ public final class PersonSchema {
 
       /**
        * <code>string home_addr = 4;</code>
+       * @return Whether the homeAddr field is set.
+       */
+      @java.lang.Override
+      public boolean hasHomeAddr() {
+        return addressCase_ == 4;
+      }
+      /**
+       * <code>string home_addr = 4;</code>
        * @return The homeAddr.
        */
+      @java.lang.Override
       public java.lang.String getHomeAddr() {
         java.lang.Object ref = "";
         if (addressCase_ == 4) {
@@ -1930,6 +2014,7 @@ public final class PersonSchema {
        * <code>string home_addr = 4;</code>
        * @return The bytes for homeAddr.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getHomeAddrBytes() {
         java.lang.Object ref = "";
@@ -1994,8 +2079,17 @@ public final class PersonSchema {
 
       /**
        * <code>string work_addr = 5;</code>
+       * @return Whether the workAddr field is set.
+       */
+      @java.lang.Override
+      public boolean hasWorkAddr() {
+        return addressCase_ == 5;
+      }
+      /**
+       * <code>string work_addr = 5;</code>
        * @return The workAddr.
        */
+      @java.lang.Override
       public java.lang.String getWorkAddr() {
         java.lang.Object ref = "";
         if (addressCase_ == 5) {
@@ -2017,6 +2111,7 @@ public final class PersonSchema {
        * <code>string work_addr = 5;</code>
        * @return The bytes for workAddr.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getWorkAddrBytes() {
         java.lang.Object ref = "";
@@ -2082,9 +2177,9 @@ public final class PersonSchema {
       private java.util.List<com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber> phone_ =
         java.util.Collections.emptyList();
       private void ensurePhoneIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           phone_ = new java.util.ArrayList<com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber>(phone_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -2234,7 +2329,7 @@ public final class PersonSchema {
       public Builder clearPhone() {
         if (phoneBuilder_ == null) {
           phone_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           phoneBuilder_.clear();
@@ -2311,7 +2406,7 @@ public final class PersonSchema {
           phoneBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber, com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber.Builder, com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumberOrBuilder>(
                   phone_,
-                  ((bitField0_ & 0x00000001) != 0),
+                  ((bitField0_ & 0x00000002) != 0),
                   getParentForChildren(),
                   isClean());
           phone_ = null;
@@ -2390,15 +2485,15 @@ public final class PersonSchema {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\022PersonSchema.proto\"\367\001\n\006Person\022\n\n\002id\030\001 " +
-      "\001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005email\030\003 \001(\t\022\023\n\thome" +
-      "_addr\030\004 \001(\tH\000\022\023\n\twork_addr\030\005 \001(\tH\000\022\"\n\005ph" +
-      "one\030\006 \003(\0132\023.Person.PhoneNumber\032>\n\013PhoneN" +
-      "umber\022\016\n\006number\030\001 \001(\t\022\037\n\004type\030\002 \001(\0162\021.Pe" +
-      "rson.PhoneType\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022" +
-      "\010\n\004HOME\020\001\022\010\n\004WORK\020\002B\t\n\007addressB0\n com.gi" +
-      "thub.os72.protobuf.dynamicB\014PersonSchema" +
-      "b\006proto3"
+      "\n\022PersonSchema.proto\"\203\002\n\006Person\022\017\n\002id\030\001 " +
+      "\001(\005H\001\210\001\001\022\014\n\004name\030\002 \001(\t\022\r\n\005email\030\003 \001(\t\022\023\n" +
+      "\thome_addr\030\004 \001(\tH\000\022\023\n\twork_addr\030\005 \001(\tH\000\022" +
+      "\"\n\005phone\030\006 \003(\0132\023.Person.PhoneNumber\032>\n\013P" +
+      "honeNumber\022\016\n\006number\030\001 \001(\t\022\037\n\004type\030\002 \001(\016" +
+      "2\021.Person.PhoneType\"+\n\tPhoneType\022\n\n\006MOBI" +
+      "LE\020\000\022\010\n\004HOME\020\001\022\010\n\004WORK\020\002B\t\n\007addressB\005\n\003_" +
+      "idB0\n com.github.os72.protobuf.dynamicB\014" +
+      "PersonSchemab\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2409,7 +2504,7 @@ public final class PersonSchema {
     internal_static_Person_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Person_descriptor,
-        new java.lang.String[] { "Id", "Name", "Email", "HomeAddr", "WorkAddr", "Phone", "Address", });
+        new java.lang.String[] { "Id", "Name", "Email", "HomeAddr", "WorkAddr", "Phone", "Address", "Id", });
     internal_static_Person_PhoneNumber_descriptor =
       internal_static_Person_descriptor.getNestedTypes().get(0);
     internal_static_Person_PhoneNumber_fieldAccessorTable = new
