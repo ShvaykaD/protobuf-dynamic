@@ -335,6 +335,12 @@ public class DynamicSchema {
             return new DynamicSchema(fileDescSetBuilder.build());
         }
 
+        // The supported values are "proto2" and "proto3".
+        public Builder setSyntax(String name) {
+            mFileDescProtoBuilder.setSyntax(name);
+            return this;
+        }
+
         public Builder setName(String name) {
             mFileDescProtoBuilder.setName(name);
             return this;

@@ -38,6 +38,7 @@ public class DynamicSchemaTest
 		// Create dynamic schema
 		DynamicSchema.Builder schemaBuilder = DynamicSchema.newBuilder();
 		schemaBuilder.setName("PersonSchemaDynamic.proto");
+		schemaBuilder.setSyntax("proto3");
 
 		MessageDefinition msgDef = MessageDefinition.newBuilder("Person") // message Person
 				.addField("optional", "int32", "id", 1)		// int32 id = 1
