@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 protobuf-dynamic developers
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,9 +22,8 @@ import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 /**
  * EnumDefinition
  */
-public class EnumDefinition
-{
-	// --- public static ---
+public class EnumDefinition {
+    // --- public static ---
 
 	public static Builder newBuilder(String enumName) {
 		return new Builder(enumName);
@@ -41,7 +40,7 @@ public class EnumDefinition
 	EnumDescriptorProto getEnumType() {
 		return mEnumType;
 	}
-	
+
 	// --- private ---
 
 	private EnumDefinition(EnumDescriptorProto enumType) {
@@ -50,12 +49,11 @@ public class EnumDefinition
 
 	private EnumDescriptorProto mEnumType;
 
-	/**
-	 * EnumDefinition.Builder
-	 */
-	public static class Builder
-	{
-		// --- public ---
+    /**
+     * EnumDefinition.Builder
+     */
+    public static class Builder {
+        // --- public ---
 
 		public Builder addValue(String name, int num) {
 			EnumValueDescriptorProto.Builder enumValBuilder = EnumValueDescriptorProto.newBuilder();

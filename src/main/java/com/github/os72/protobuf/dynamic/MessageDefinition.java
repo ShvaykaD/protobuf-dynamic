@@ -95,6 +95,12 @@ public class MessageDefinition {
             FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
             if (label != null) {
                 fieldBuilder.setLabel(label);
+                if (FieldDescriptorProto.Label.LABEL_OPTIONAL.equals(label)) {
+                    fieldBuilder.setProto3Optional(true);
+                    oneofBuilder = addOneof(name);
+                }
+            } else {
+                fieldBuilder.setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL);
             }
             FieldDescriptorProto.Type primType = sTypeMap.get(type);
             if (primType != null) {
@@ -124,7 +130,7 @@ public class MessageDefinition {
         }
 
         public OneofBuilder add(String type, String name, int num) {
-            mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, this);
+            mMsgBuilder.addField(null, type, name, num, this);
             return this;
         }
 
