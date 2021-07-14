@@ -4,8 +4,8 @@ option java_package = "com.github.os72.protobuf.dynamic";
 option java_outer_classname = "PersonSchema";
 
 message Person {
-  int32 id = 1;
-  string name = 2;
+  optional int32 id = 1;
+  optional string name = 2;
   string email = 3;
   oneof address {
     string home_addr = 4;

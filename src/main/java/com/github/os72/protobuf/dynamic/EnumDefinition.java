@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 protobuf-dynamic developers
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,59 +22,57 @@ import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 /**
  * EnumDefinition
  */
-public class EnumDefinition
-{
-	// --- public static ---
+public class EnumDefinition {
+    // --- public static ---
 
-	public static Builder newBuilder(String enumName) {
-		return new Builder(enumName);
-	}
+    public static Builder newBuilder(String enumName) {
+        return new Builder(enumName);
+    }
 
-	// --- public ---
+    // --- public ---
 
-	public String toString() {
-		return mEnumType.toString();
-	}
+    public String toString() {
+        return mEnumType.toString();
+    }
 
-	// --- package ---
+    // --- package ---
 
-	EnumDescriptorProto getEnumType() {
-		return mEnumType;
-	}
-	
-	// --- private ---
+    EnumDescriptorProto getEnumType() {
+        return mEnumType;
+    }
 
-	private EnumDefinition(EnumDescriptorProto enumType) {
-		mEnumType = enumType;
-	}
+    // --- private ---
 
-	private EnumDescriptorProto mEnumType;
+    private EnumDefinition(EnumDescriptorProto enumType) {
+        mEnumType = enumType;
+    }
 
-	/**
-	 * EnumDefinition.Builder
-	 */
-	public static class Builder
-	{
-		// --- public ---
+    private EnumDescriptorProto mEnumType;
 
-		public Builder addValue(String name, int num) {
-			EnumValueDescriptorProto.Builder enumValBuilder = EnumValueDescriptorProto.newBuilder();
-			enumValBuilder.setName(name).setNumber(num);
-			mEnumTypeBuilder.addValue(enumValBuilder.build());
-			return this;
-		}
+    /**
+     * EnumDefinition.Builder
+     */
+    public static class Builder {
+        // --- public ---
 
-		public EnumDefinition build() {
-			return new EnumDefinition(mEnumTypeBuilder.build());
-		}
+        public Builder addValue(String name, int num) {
+            EnumValueDescriptorProto.Builder enumValBuilder = EnumValueDescriptorProto.newBuilder();
+            enumValBuilder.setName(name).setNumber(num);
+            mEnumTypeBuilder.addValue(enumValBuilder.build());
+            return this;
+        }
 
-		// --- private ---
+        public EnumDefinition build() {
+            return new EnumDefinition(mEnumTypeBuilder.build());
+        }
 
-		private Builder(String enumName) {
-			mEnumTypeBuilder = EnumDescriptorProto.newBuilder();
-			mEnumTypeBuilder.setName(enumName);
-		}
+        // --- private ---
 
-		private EnumDescriptorProto.Builder mEnumTypeBuilder;
-	}
+        private Builder(String enumName) {
+            mEnumTypeBuilder = EnumDescriptorProto.newBuilder();
+            mEnumTypeBuilder.setName(enumName);
+        }
+
+        private EnumDescriptorProto.Builder mEnumTypeBuilder;
+    }
 }

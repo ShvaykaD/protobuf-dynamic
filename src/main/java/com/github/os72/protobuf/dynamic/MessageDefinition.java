@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 protobuf-dynamic developers
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -60,7 +60,7 @@ public class MessageDefinition {
         // --- public ---
 
         public Builder addField(String label, String type, String name, int num) {
-            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label) == null ? FieldDescriptorProto.Label.LABEL_OPTIONAL : sLabelMap.get(label);
+            FieldDescriptorProto.Label protoLabel = sLabelMap.get(label);
             addField(protoLabel, type, name, num, null);
             return this;
         }
@@ -93,7 +93,15 @@ public class MessageDefinition {
 
         private void addField(FieldDescriptorProto.Label label, String type, String name, int num, OneofBuilder oneofBuilder) {
             FieldDescriptorProto.Builder fieldBuilder = FieldDescriptorProto.newBuilder();
-            fieldBuilder.setLabel(label);
+            if (label != null) {
+                fieldBuilder.setLabel(label);
+                if (FieldDescriptorProto.Label.LABEL_OPTIONAL.equals(label)) {
+                    fieldBuilder.setProto3Optional(true);
+                    oneofBuilder = addOneof(name);
+                }
+            } else {
+                fieldBuilder.setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL);
+            }
             FieldDescriptorProto.Type primType = sTypeMap.get(type);
             if (primType != null) {
                 fieldBuilder.setType(primType);
@@ -122,7 +130,7 @@ public class MessageDefinition {
         }
 
         public OneofBuilder add(String type, String name, int num) {
-            mMsgBuilder.addField(FieldDescriptorProto.Label.LABEL_OPTIONAL, type, name, num, this);
+            mMsgBuilder.addField(null, type, name, num, this);
             return this;
         }
 
@@ -173,5 +181,6 @@ public class MessageDefinition {
 
         sLabelMap = new HashMap<String, FieldDescriptorProto.Label>();
         sLabelMap.put("repeated", FieldDescriptorProto.Label.LABEL_REPEATED);
+        sLabelMap.put("optional", FieldDescriptorProto.Label.LABEL_OPTIONAL);
     }
 }

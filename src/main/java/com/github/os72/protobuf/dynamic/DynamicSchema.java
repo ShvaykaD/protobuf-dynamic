@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 protobuf-dynamic developers
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -333,6 +333,12 @@ public class DynamicSchema {
             fileDescSetBuilder.addFile(mFileDescProtoBuilder.build());
             fileDescSetBuilder.mergeFrom(mFileDescSetBuilder.build());
             return new DynamicSchema(fileDescSetBuilder.build());
+        }
+
+        // The supported values are "proto2" and "proto3".
+        public Builder setSyntax(String name) {
+            mFileDescProtoBuilder.setSyntax(name);
+            return this;
         }
 
         public Builder setName(String name) {
