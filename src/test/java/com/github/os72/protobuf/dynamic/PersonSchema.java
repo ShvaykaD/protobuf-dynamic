@@ -148,85 +148,6 @@ public final class PersonSchema {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private Person(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000002;
-              name_ = s;
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              email_ = s;
-              break;
-            }
-            case 34: {
-              java.lang.String s = input.readStringRequireUtf8();
-              addressCase_ = 4;
-              address_ = s;
-              break;
-            }
-            case 42: {
-              java.lang.String s = input.readStringRequireUtf8();
-              addressCase_ = 5;
-              address_ = s;
-              break;
-            }
-            case 50: {
-              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-                phone_ = new java.util.ArrayList<com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              phone_.add(
-                  input.readMessage(com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber.parser(), extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000004) != 0)) {
-          phone_ = java.util.Collections.unmodifiableList(phone_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.github.os72.protobuf.dynamic.PersonSchema.internal_static_Person_descriptor;
@@ -413,55 +334,6 @@ public final class PersonSchema {
       getUnknownFields() {
         return this.unknownFields;
       }
-      private PhoneNumber(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                java.lang.String s = input.readStringRequireUtf8();
-
-                number_ = s;
-                break;
-              }
-              case 16: {
-                int rawValue = input.readEnum();
-
-                type_ = rawValue;
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.github.os72.protobuf.dynamic.PersonSchema.internal_static_Person_PhoneNumber_descriptor;
@@ -546,13 +418,13 @@ public final class PersonSchema {
       @java.lang.Override
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (!getNumberBytes().isEmpty()) {
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(number_)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 1, number_);
         }
         if (type_ != com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType.MOBILE.getNumber()) {
           output.writeEnum(2, type_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
       @java.lang.Override
@@ -561,14 +433,14 @@ public final class PersonSchema {
         if (size != -1) return size;
 
         size = 0;
-        if (!getNumberBytes().isEmpty()) {
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(number_)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, number_);
         }
         if (type_ != com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneType.MOBILE.getNumber()) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(2, type_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -586,7 +458,7 @@ public final class PersonSchema {
         if (!getNumber()
             .equals(other.getNumber())) return false;
         if (type_ != other.type_) return false;
-        if (!unknownFields.equals(other.unknownFields)) return false;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
         return true;
       }
 
@@ -601,7 +473,7 @@ public final class PersonSchema {
         hash = (53 * hash) + getNumber().hashCode();
         hash = (37 * hash) + TYPE_FIELD_NUMBER;
         hash = (53 * hash) + type_;
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -718,18 +590,13 @@ public final class PersonSchema {
 
         // Construct using com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
+
         }
         @java.lang.Override
         public Builder clear() {
@@ -821,7 +688,7 @@ public final class PersonSchema {
           if (other.type_ != 0) {
             setTypeValue(other.getTypeValue());
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
@@ -836,17 +703,40 @@ public final class PersonSchema {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 10: {
+                  number_ = input.readStringRequireUtf8();
+
+                  break;
+                } // case 10
+                case 16: {
+                  type_ = input.readEnum();
+
+                  break;
+                } // case 16
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
 
@@ -1012,7 +902,18 @@ public final class PersonSchema {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PhoneNumber(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -1341,7 +1242,7 @@ public final class PersonSchema {
       if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
       }
-      if (!getEmailBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(email_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, email_);
       }
       if (addressCase_ == 4) {
@@ -1353,7 +1254,7 @@ public final class PersonSchema {
       for (int i = 0; i < phone_.size(); i++) {
         output.writeMessage(6, phone_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1369,7 +1270,7 @@ public final class PersonSchema {
       if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
       }
-      if (!getEmailBytes().isEmpty()) {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(email_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, email_);
       }
       if (addressCase_ == 4) {
@@ -1382,7 +1283,7 @@ public final class PersonSchema {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, phone_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1424,7 +1325,7 @@ public final class PersonSchema {
         case 0:
         default:
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1461,7 +1362,7 @@ public final class PersonSchema {
         case 0:
         default:
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1578,19 +1479,13 @@ public final class PersonSchema {
 
       // Construct using com.github.os72.protobuf.dynamic.PersonSchema.Person.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getPhoneFieldBuilder();
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
@@ -1603,10 +1498,11 @@ public final class PersonSchema {
 
         if (phoneBuilder_ == null) {
           phone_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
         } else {
+          phone_ = null;
           phoneBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000004);
         addressCase_ = 0;
         address_ = null;
         return this;
@@ -1766,7 +1662,7 @@ public final class PersonSchema {
             break;
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1781,17 +1677,70 @@ public final class PersonSchema {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.github.os72.protobuf.dynamic.PersonSchema.Person parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                id_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                name_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 26: {
+                email_ = input.readStringRequireUtf8();
+
+                break;
+              } // case 26
+              case 34: {
+                java.lang.String s = input.readStringRequireUtf8();
+                addressCase_ = 4;
+                address_ = s;
+                break;
+              } // case 34
+              case 42: {
+                java.lang.String s = input.readStringRequireUtf8();
+                addressCase_ = 5;
+                address_ = s;
+                break;
+              } // case 42
+              case 50: {
+                com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber m =
+                    input.readMessage(
+                        com.github.os72.protobuf.dynamic.PersonSchema.Person.PhoneNumber.parser(),
+                        extensionRegistry);
+                if (phoneBuilder_ == null) {
+                  ensurePhoneIsMutable();
+                  phone_.add(m);
+                } else {
+                  phoneBuilder_.addMessage(m);
+                }
+                break;
+              } // case 50
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.github.os72.protobuf.dynamic.PersonSchema.Person) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int addressCase_ = 0;
@@ -2475,7 +2424,18 @@ public final class PersonSchema {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Person(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
