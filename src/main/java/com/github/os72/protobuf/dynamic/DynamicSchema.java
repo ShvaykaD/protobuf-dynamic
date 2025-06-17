@@ -16,17 +16,7 @@
 
 package com.github.os72.protobuf.dynamic;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.github.os72.protocjar.Protoc;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import com.google.protobuf.Descriptors.Descriptor;
@@ -36,10 +26,41 @@ import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.DynamicMessage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * DynamicSchema
  */
 public class DynamicSchema {
+
+    private static final String PROTOC_VERSION;
+
+    static {
+        try (InputStream in = ClassLoader.getSystemResourceAsStream("protobuf.properties")) {
+            if (in == null) {
+                throw new IllegalStateException("version.properties not found");
+            }
+            Properties props = new Properties();
+            props.load(in);
+            PROTOC_VERSION = props.getProperty("protobuf.version");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load protobuf.version", e);
+        }
+    }
+
     // --- public static ---
 
     /**
@@ -52,12 +73,48 @@ public class DynamicSchema {
     }
 
     /**
+     * Parses a schema definition from a raw .proto string using protoc-jar.
+     *
+     * @param protoSchema   the .proto schema string
+     * @param protoFileName the name to assign to the temporary .proto file
+     * @return the parsed schema object
+     * @throws DescriptorValidationException if the descriptor validation fails
+     * @throws IOException                   if an I/O error occurs
+     * @throws InterruptedException          if the protoc execution is interrupted
+     */
+    public static DynamicSchema parseFromProtoString(String protoSchema, String protoFileName)
+            throws IOException, DescriptorValidationException, InterruptedException {
+
+        Path tempDir = Files.createTempDirectory("proto-dynamic");
+        Path protoPath = tempDir.resolve(protoFileName);
+        Files.writeString(protoPath, protoSchema);
+
+        Path descPath = tempDir.resolve("schema.desc");
+
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream errStream = new ByteArrayOutputStream();
+
+        int exitCode = Protoc.runProtoc(new String[]{
+                "-v" + PROTOC_VERSION,
+                "--descriptor_set_out=" + descPath.toAbsolutePath(),
+                "--proto_path=" + tempDir.toAbsolutePath(),
+                protoFileName
+        }, outStream, errStream);
+        if (exitCode != 0) {
+            throw new IOException(errStream.toString().trim());
+        }
+        try (InputStream in = Files.newInputStream(descPath)) {
+            return DynamicSchema.parseFrom(in);
+        }
+    }
+
+    /**
      * Parses a serialized schema descriptor (from input stream; closes the stream)
      *
      * @param schemaDescIn the descriptor input stream
      * @return the schema object
      * @throws DescriptorValidationException if the descriptor validation fails
-     * @throws IOException if an I/O error occurs
+     * @throws IOException                   if an I/O error occurs
      */
     public static DynamicSchema parseFrom(InputStream schemaDescIn) throws DescriptorValidationException, IOException {
         try {
@@ -79,7 +136,7 @@ public class DynamicSchema {
      * @param schemaDescBuf the descriptor byte array
      * @return the schema object
      * @throws DescriptorValidationException if the descriptor validation fails
-     * @throws IOException if an I/O error occurs
+     * @throws IOException                   if an I/O error occurs
      */
     public static DynamicSchema parseFrom(byte[] schemaDescBuf) throws DescriptorValidationException, IOException {
         return new DynamicSchema(FileDescriptorSet.parseFrom(schemaDescBuf));
@@ -166,6 +223,16 @@ public class DynamicSchema {
      */
     public Set<String> getMessageTypes() {
         return new TreeSet<String>(mMsgDescriptorMapFull.keySet());
+    }
+
+    /**
+     * Returns the list of top-level message names in the order they were declared
+     * in the original .proto schema.
+     *
+     * @return an unmodifiable list of declared message names
+     */
+    public List<String> getMessageNamesInDeclarationOrder() {
+        return Collections.unmodifiableList(declaredMessageNames);
     }
 
     /**
@@ -286,6 +353,11 @@ public class DynamicSchema {
         mMsgDescriptorMapFull.put(msgTypeNameFull, msgType);
         mMsgDescriptorMapShort.put(msgTypeNameShort, msgType);
 
+        // Only track top-level message types (no scope)
+        if (scope == null) {
+            declaredMessageNames.add(msgType.getName());
+        }
+
         for (Descriptor nestedType : msgType.getNestedTypes()) {
             addMessageType(nestedType, msgTypeNameShort, msgDupes, enumDupes);
         }
@@ -314,6 +386,8 @@ public class DynamicSchema {
     private Map<String, Descriptor> mMsgDescriptorMapShort = new HashMap<String, Descriptor>();
     private Map<String, EnumDescriptor> mEnumDescriptorMapFull = new HashMap<String, EnumDescriptor>();
     private Map<String, EnumDescriptor> mEnumDescriptorMapShort = new HashMap<String, EnumDescriptor>();
+
+    private final List<String> declaredMessageNames = new ArrayList<>();
 
     /**
      * DynamicSchema.Builder
