@@ -5,7 +5,7 @@
     <groupId>org.thingsboard</groupId>
     <artifactId>protobuf-dynamic</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.4TB</version>
+    <version>1.0.5TB</version>
     <name>protobuf-dynamic</name>
     <url>https://github.com/os72/protobuf-dynamic</url>
     <description>Protocol Buffers Dynamic Schema</description>
