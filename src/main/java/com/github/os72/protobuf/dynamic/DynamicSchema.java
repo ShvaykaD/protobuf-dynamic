@@ -29,6 +29,8 @@ import com.google.protobuf.DynamicMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -88,21 +90,30 @@ public class DynamicSchema {
         Path tempDir = Files.createTempDirectory("proto-dynamic");
         Path protoPath = tempDir.resolve(protoFileName);
         Files.writeString(protoPath, protoSchema);
-
         Path descPath = tempDir.resolve("schema.desc");
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         ByteArrayOutputStream errStream = new ByteArrayOutputStream();
 
-        int exitCode = Protoc.runProtoc(new String[]{
-                "-v" + PROTOC_VERSION,
-                "--descriptor_set_out=" + descPath.toAbsolutePath(),
-                "--proto_path=" + tempDir.toAbsolutePath(),
-                protoFileName
-        }, outStream, errStream);
-        if (exitCode != 0) {
-            throw new IOException(errStream.toString().trim());
+        // Suppress System.out from protoc-jar
+        PrintStream originalOut = System.out;
+        try {
+            System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+
+            int exitCode = Protoc.runProtoc(new String[]{
+                    "-v" + PROTOC_VERSION,
+                    "--descriptor_set_out=" + descPath.toAbsolutePath(),
+                    "--proto_path=" + tempDir.toAbsolutePath(),
+                    protoFileName
+            }, outStream, errStream);
+
+            if (exitCode != 0) {
+                throw new IOException(errStream.toString().trim());
+            }
+        } finally {
+            System.setOut(originalOut);
         }
+
         try (InputStream in = Files.newInputStream(descPath)) {
             return DynamicSchema.parseFrom(in);
         }
